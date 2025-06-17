@@ -45,6 +45,18 @@ if [[ "${SHOULD_BUILD}" == "yes" ]]; then
 
       npm run gulp "vscode-win32-${VSCODE_ARCH}-min-ci"
 
+      # Remove Copilot button from the built application
+      if [[ -f "../remove_copilot_button.sh" ]]; then
+        echo "Removing Copilot button from VSCode-win32-${VSCODE_ARCH}..."
+        cd ..
+        # Update the script to use the correct architecture-specific path
+        sed "s/VSCode-win32-x64/VSCode-win32-${VSCODE_ARCH}/g" remove_copilot_button.sh > remove_copilot_button_temp.sh
+        chmod +x remove_copilot_button_temp.sh
+        ./remove_copilot_button_temp.sh
+        rm -f remove_copilot_button_temp.sh
+        cd vscode
+      fi
+
       if [[ "${VSCODE_ARCH}" != "x64" ]]; then
         SHOULD_BUILD_REH="no"
         SHOULD_BUILD_REH_WEB="no"
